@@ -1,9 +1,7 @@
+import Spreadsheet from "../components/Spreadsheet"
+
 const Home = () => {
-  return (
-    <div>
-      <p>Home</p>
-    </div>
-  )
+  return <Spreadsheet />
 }
 
 export default Home
