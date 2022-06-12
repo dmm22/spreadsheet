@@ -32,6 +32,7 @@ const Spreadsheet = () => {
 
       document.addEventListener("keydown", ({ key }) => {
         if (key === "Escape") deselectAllCells()
+        globalInputRef?.current?.blur()
       })
     })
   }, [])
