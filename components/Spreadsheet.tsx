@@ -8,7 +8,20 @@ const Spreadsheet = () => {
   const [data, setData] = useState(blankSpreadsheet)
   const [selectionStart, setSelectionStart] = useState()
 
-  const startSelection = () => {}
+  const getCoordinates = (e: React.PointerEvent) => {
+    const { target } = e
+    if (target instanceof HTMLElement) {
+      const coordinates = target.dataset.cell
+      if (typeof coordinates === "string") {
+        return JSON.parse(coordinates)
+      } else return null
+    } else return null
+  }
+
+  const startSelection = (e: React.PointerEvent) => {
+    const coordinates = getCoordinates(e)
+    console.log(coordinates)
+  }
 
   return (
     <SheetContainer>
@@ -19,6 +32,7 @@ const Spreadsheet = () => {
               rowIndex={rowIndex}
               columnIndex={columnIndex}
               value={cell.value}
+              startSelection={startSelection}
               key={columnIndex}
             />
           ))}
