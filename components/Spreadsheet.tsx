@@ -7,6 +7,7 @@ const blankSpreadsheet = [...Array(5)].map(_ => Array(5).fill({ value: "" }))
 const Spreadsheet = () => {
   const [data, setData] = useState(blankSpreadsheet)
   const [selectionStart, setSelectionStart] = useState()
+  const [selectionStop, setSelectionStop] = useState()
 
   const getCoordinates = (e: React.PointerEvent) => {
     const { target } = e
@@ -20,12 +21,24 @@ const Spreadsheet = () => {
 
   const startSelection = (e: React.PointerEvent) => {
     const coordinates = getCoordinates(e)
-    if (coordinates) setSelectionStart(coordinates)
+    if (coordinates) {
+      setSelectionStart(coordinates)
+      setSelectionStop(coordinates)
+    }
+  }
+
+  const stopSelection = (e: React.PointerEvent) => {
+    const mouseDownCheck = e.buttons
+
+    if (mouseDownCheck >= 1) {
+      const coordinates = getCoordinates(e)
+      setSelectionStop(coordinates)
+    }
   }
 
   return (
     <>
-      <pre>{JSON.stringify({ selectionStart })}</pre>
+      <pre>{JSON.stringify({ selectionStart, selectionStop })}</pre>
       <SheetContainer>
         {data.map((row, rowIndex) => (
           <Row key={rowIndex}>
@@ -35,6 +48,7 @@ const Spreadsheet = () => {
                 columnIndex={columnIndex}
                 value={cell.value}
                 startSelection={startSelection}
+                stopSelection={stopSelection}
                 key={columnIndex}
               />
             ))}
