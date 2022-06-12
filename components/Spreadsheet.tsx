@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback, useState, useEffect } from "react"
 import { Row, SheetContainer } from "../styles/Spreadsheet.styled"
 import Cell from "./Cell"
 
@@ -11,6 +11,10 @@ const Spreadsheet = () => {
   const [selectionStart, setSelectionStart] = useState()
   const [selectionStop, setSelectionStop] = useState()
 
+  useEffect(() => {
+    selectCells()
+  }, [selectionStop])
+
   const getCoordinates = (e: React.PointerEvent) => {
     const { target } = e
     if (target instanceof HTMLElement) {
@@ -19,6 +23,38 @@ const Spreadsheet = () => {
         return JSON.parse(coordinates)
       } else return null
     } else return null
+  }
+
+  const selectCells = () => {
+    if (Array.isArray(selectionStart) && Array.isArray(selectionStop)) {
+      const selectedRowBoundaries = [selectionStart[0], selectionStop[0]].sort()
+      const selectedColumnBoundaries = [
+        selectionStart[1],
+        selectionStop[1],
+      ].sort()
+
+      // console.log({ selectedRowBoundaries, selectedColumnBoundaries })
+
+      const dataWithNewCellsSelected = data.map((row, rowIndex) =>
+        row.map((cell, columnIndex) => {
+          let copiedCell = { ...cell }
+          if (
+            rowIndex >= selectedRowBoundaries[0] &&
+            rowIndex <= selectedRowBoundaries[1] &&
+            columnIndex >= selectedColumnBoundaries[0] &&
+            columnIndex <= selectedColumnBoundaries[1]
+          ) {
+            copiedCell.selected = true
+            return copiedCell
+          } else {
+            copiedCell.selected = false
+            return copiedCell
+          }
+        })
+      )
+
+      setData(dataWithNewCellsSelected)
+    }
   }
 
   const startSelection = useCallback((e: React.PointerEvent) => {
@@ -40,7 +76,6 @@ const Spreadsheet = () => {
 
   return (
     <>
-      <pre>{JSON.stringify({ selectionStart, selectionStop })}</pre>
       <SheetContainer>
         {data.map((row, rowIndex) => (
           <Row key={rowIndex}>
@@ -57,6 +92,9 @@ const Spreadsheet = () => {
           </Row>
         ))}
       </SheetContainer>
+      <pre>
+        {JSON.stringify({ selectionStart, selectionStop, data }, null, 2)}
+      </pre>
     </>
   )
 }
