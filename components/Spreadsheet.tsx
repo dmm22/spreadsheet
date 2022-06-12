@@ -1,5 +1,9 @@
-import { useCallback, useState, useEffect } from "react"
-import { Row, SheetContainer } from "../styles/Spreadsheet.styled"
+import { useCallback, useState, useEffect, useRef } from "react"
+import {
+  GlobalTextArea,
+  Row,
+  SheetContainer,
+} from "../styles/Spreadsheet.styled"
 import Cell from "./Cell"
 
 const blankSpreadsheet = [...Array(5)].map(_ =>
@@ -10,6 +14,8 @@ const Spreadsheet = () => {
   const [data, setData] = useState(blankSpreadsheet)
   const [selectionStart, setSelectionStart] = useState<number[] | null>()
   const [selectionStop, setSelectionStop] = useState<number[] | null>()
+
+  const globalInputRef = useRef<HTMLTextAreaElement | null>(null)
 
   useEffect(() => {
     selectCells()
@@ -96,11 +102,15 @@ const Spreadsheet = () => {
     if (mouseDownCheck >= 1) {
       const coordinates = getCoordinates(e)
       setSelectionStop(coordinates)
+      focusGlobalInput()
     }
   }, [])
 
+  const focusGlobalInput = () => globalInputRef?.current?.focus()
+
   return (
     <>
+      <GlobalTextArea ref={globalInputRef} />
       <SheetContainer>
         {data.map((row, rowIndex) => (
           <Row key={rowIndex}>

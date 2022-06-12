@@ -11,3 +11,7 @@ export const Row = styled.div`
   display: flex;
   gap: 0.5rem;
 `
+
+export const GlobalTextArea = styled.textarea`
+  resize: none;
+`
