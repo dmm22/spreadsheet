@@ -31,8 +31,10 @@ const Spreadsheet = () => {
       }
 
       document.addEventListener("keydown", ({ key }) => {
-        if (key === "Escape") deselectAllCells()
-        globalInputRef?.current?.blur()
+        if (key === "Escape") {
+          deselectAllCells()
+          globalInputRef?.current?.blur()
+        }
       })
     })
   }, [])
@@ -109,9 +111,32 @@ const Spreadsheet = () => {
 
   const focusGlobalInput = () => globalInputRef?.current?.focus()
 
+  const setSelectedCellsToGlobalTextAreaValue = (value: string) => {
+    modifySelectedCells("value", value)
+  }
+
+  const modifySelectedCells = (property: string, value: string | boolean) => {
+    const modifiedData = data.map(row =>
+      row.map(cell => {
+        if (cell.selected) {
+          let copiedCell = { ...cell }
+          copiedCell[property] = value
+          return copiedCell
+        } else return cell
+      })
+    )
+
+    setData(modifiedData)
+  }
+
   return (
     <>
-      <GlobalTextArea ref={globalInputRef} />
+      <GlobalTextArea
+        onChange={({ target }) =>
+          setSelectedCellsToGlobalTextAreaValue(target.value)
+        }
+        ref={globalInputRef}
+      />
       <SheetContainer>
         {data.map((row, rowIndex) => (
           <Row key={rowIndex}>
