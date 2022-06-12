@@ -84,6 +84,7 @@ const Spreadsheet = () => {
                 rowIndex={rowIndex}
                 columnIndex={columnIndex}
                 value={cell.value}
+                selected={cell.selected}
                 startSelection={startSelection}
                 stopSelection={stopSelection}
                 key={columnIndex}
