@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { Row, SheetContainer } from "../styles/Spreadsheet.styled"
 import Cell from "./Cell"
 
@@ -21,22 +21,22 @@ const Spreadsheet = () => {
     } else return null
   }
 
-  const startSelection = (e: React.PointerEvent) => {
+  const startSelection = useCallback((e: React.PointerEvent) => {
     const coordinates = getCoordinates(e)
     if (coordinates) {
       setSelectionStart(coordinates)
       setSelectionStop(coordinates)
     }
-  }
+  }, [])
 
-  const stopSelection = (e: React.PointerEvent) => {
+  const stopSelection = useCallback((e: React.PointerEvent) => {
     const mouseDownCheck = e.buttons
 
     if (mouseDownCheck >= 1) {
       const coordinates = getCoordinates(e)
       setSelectionStop(coordinates)
     }
-  }
+  }, [])
 
   return (
     <>
