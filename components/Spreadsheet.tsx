@@ -8,12 +8,23 @@ const blankSpreadsheet = [...Array(5)].map(_ =>
 
 const Spreadsheet = () => {
   const [data, setData] = useState(blankSpreadsheet)
-  const [selectionStart, setSelectionStart] = useState()
-  const [selectionStop, setSelectionStop] = useState()
+  const [selectionStart, setSelectionStart] = useState<number[] | null>()
+  const [selectionStop, setSelectionStop] = useState<number[] | null>()
 
   useEffect(() => {
     selectCells()
   }, [selectionStop])
+
+  useEffect(() => {
+    document.addEventListener("pointerdown", ({ target }) => {
+      if (target instanceof HTMLElement) {
+        const customAttributes = target?.attributes
+        if (customAttributes.length === 0) {
+          deselectAllCells()
+        }
+      }
+    })
+  }, [])
 
   const getCoordinates = (e: React.PointerEvent) => {
     const { target } = e
@@ -25,6 +36,18 @@ const Spreadsheet = () => {
     } else return null
   }
 
+  const deselectAllCells = () => {
+    const dataWithNoSelectedCells = data.map(row =>
+      row.map(cell => {
+        let copiedCell = { ...cell }
+        copiedCell.selected = false
+        return copiedCell
+      })
+    )
+
+    setData(dataWithNoSelectedCells)
+  }
+
   const selectCells = () => {
     if (Array.isArray(selectionStart) && Array.isArray(selectionStop)) {
       const selectedRowBoundaries = [selectionStart[0], selectionStop[0]].sort()
@@ -32,8 +55,6 @@ const Spreadsheet = () => {
         selectionStart[1],
         selectionStop[1],
       ].sort()
-
-      // console.log({ selectedRowBoundaries, selectedColumnBoundaries })
 
       const dataWithNewCellsSelected = data.map((row, rowIndex) =>
         row.map((cell, columnIndex) => {
