@@ -20,25 +20,28 @@ const Spreadsheet = () => {
 
   const startSelection = (e: React.PointerEvent) => {
     const coordinates = getCoordinates(e)
-    console.log(coordinates)
+    if (coordinates) setSelectionStart(coordinates)
   }
 
   return (
-    <SheetContainer>
-      {data.map((row, rowIndex) => (
-        <Row key={rowIndex}>
-          {row.map((cell, columnIndex) => (
-            <Cell
-              rowIndex={rowIndex}
-              columnIndex={columnIndex}
-              value={cell.value}
-              startSelection={startSelection}
-              key={columnIndex}
-            />
-          ))}
-        </Row>
-      ))}
-    </SheetContainer>
+    <>
+      <pre>{JSON.stringify({ selectionStart })}</pre>
+      <SheetContainer>
+        {data.map((row, rowIndex) => (
+          <Row key={rowIndex}>
+            {row.map((cell, columnIndex) => (
+              <Cell
+                rowIndex={rowIndex}
+                columnIndex={columnIndex}
+                value={cell.value}
+                startSelection={startSelection}
+                key={columnIndex}
+              />
+            ))}
+          </Row>
+        ))}
+      </SheetContainer>
+    </>
   )
 }
 
