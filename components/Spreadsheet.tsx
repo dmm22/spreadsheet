@@ -2,7 +2,9 @@ import { useState } from "react"
 import { Row, SheetContainer } from "../styles/Spreadsheet.styled"
 import Cell from "./Cell"
 
-const blankSpreadsheet = [...Array(5)].map(_ => Array(5).fill({ value: "" }))
+const blankSpreadsheet = [...Array(5)].map(_ =>
+  Array(5).fill({ value: "", selected: false })
+)
 
 const Spreadsheet = () => {
   const [data, setData] = useState(blankSpreadsheet)
