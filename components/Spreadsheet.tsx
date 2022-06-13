@@ -50,15 +50,16 @@ const Spreadsheet = () => {
   }
 
   const deselectAllCells = () => {
-    const dataWithNoSelectedCells = data.map(row =>
-      row.map(cell => {
-        let copiedCell = { ...cell }
-        copiedCell.selected = false
-        return copiedCell
-      })
+    console.log("hi")
+    setData(data =>
+      data.map(row =>
+        row.map(cell => {
+          let copiedCell = { ...cell }
+          copiedCell.selected = false
+          return copiedCell
+        })
+      )
     )
-
-    setData(dataWithNoSelectedCells)
   }
 
   const selectCells = () => {
