@@ -5,7 +5,7 @@ interface CellContainerProps {
   selected: boolean
 }
 
-export const CellContainer = styled.div.attrs(
+export const CellContainer = styled.textarea.attrs(
   ({ coordinates }: CellContainerProps) => ({
     "data-cell": coordinates,
   })

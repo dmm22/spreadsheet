@@ -7,6 +7,11 @@ interface CellProps {
   selected: boolean
   startSelection: (e: React.PointerEvent) => void
   stopSelection: (e: React.PointerEvent) => void
+  handlePaste: (
+    pasteRowIndex: number,
+    pasteColumnIndex: number,
+    pasteEvent: ClipboardEvent
+  ) => void
 }
 
 const Cell = ({
@@ -16,6 +21,7 @@ const Cell = ({
   selected,
   startSelection,
   stopSelection,
+  handlePaste,
 }: CellProps) => {
   return (
     <CellContainer
@@ -23,6 +29,7 @@ const Cell = ({
       coordinates={`[${rowIndex},${columnIndex}]`}
       onPointerDown={e => startSelection(e)}
       onPointerOver={e => stopSelection(e)}
+      onPaste={e => handlePaste(rowIndex, columnIndex, e)}
     >
       {value}
     </CellContainer>
